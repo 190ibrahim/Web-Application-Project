@@ -35,7 +35,6 @@ body {
 }
 /* SIDEBAR-CONTAINER */
 .main-menu {
-    
     width: 220px;
     height: 100vh;
     background-color: #191e24;
@@ -47,12 +46,13 @@ body {
     z-index: 10;
     position: absolute;
 }
-
 .app {
     flex: 1;
     width: 75%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-
 /* TOGGLE */
 .toggle {
     position: absolute;
@@ -204,8 +204,23 @@ footer a {
     color: grey;
 }
 
+/* Toast styles */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color:#191e24;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 4px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
 
-
+.toast.show {
+    opacity: 1;
+}
 
 
 /* Ping Pong Game*/
@@ -213,6 +228,7 @@ footer a {
     width: 900px;
     height: 600px;
     position: relative;
+    /* Updated background color */
 }
 
 #canvas {

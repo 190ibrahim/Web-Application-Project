@@ -11,7 +11,6 @@ export default class PingPongGame extends Application {
         // Create container div element
         const container = document.createElement("div");
         container.classList.add("PingPong-container");
-
         // Create canvas element
         const canvas = document.createElement("canvas");
         canvas.id = "canvas";
@@ -34,7 +33,7 @@ export default class PingPongGame extends Application {
         container.appendChild(player2Score);
 
         // Append container to the document body or any desired parent element
-        document.body.appendChild(container);
+        document.getElementById("app").appendChild(container);
         const ctx = canvas.getContext('2d');
 
         canvas.width = window.innerWidth;
