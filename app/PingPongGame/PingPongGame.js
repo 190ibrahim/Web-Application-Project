@@ -1,147 +1,146 @@
 import Application from "../Application.js";
 
-
 export default class PingPongGame extends Application {
-   
-    init() {
+  init() {
     super.init();
     this.initDom();
+  }
+
+  initDom() {
+    // Create container div element
+    const container = document.createElement("div");
+    container.classList.add("PingPong-container");
+    // Create canvas element
+    const canvas = document.createElement("canvas");
+    canvas.id = "canvas";
+
+    // Create player 1 score element
+    const player1Score = document.createElement("h1");
+    player1Score.classList.add("score");
+    player1Score.id = "player1Score";
+    player1Score.textContent = "0";
+
+    // Create player 2 score element
+    const player2Score = document.createElement("h1");
+    player2Score.classList.add("score");
+    player2Score.id = "player2Score";
+    player2Score.textContent = "0";
+
+    // Append elements to container
+    container.appendChild(canvas);
+    container.appendChild(player1Score);
+    container.appendChild(player2Score);
+
+    // Append container to the document body or any desired parent element
+    document.getElementById("app").appendChild(container);
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const keysPressed = [];
+    const KEY_UP = 38;
+    const KEY_DOWN = 40;
+
+
+    window.addEventListener('keydown', function (e) {
+      keysPressed[e.keyCode] = true;
+    });
+
+    window.addEventListener('keyup', function (e) {
+      keysPressed[e.keyCode] = false;
+    });
+
+    function vec2(x, y) {
+      return { x: x, y: y };
     }
-    initDom() {
-        // Create container div element
-        const container = document.createElement("div");
-        container.classList.add("PingPong-container");
-        // Create canvas element
-        const canvas = document.createElement("canvas");
-        canvas.id = "canvas";
 
-        // Create player 1 score element
-        const player1Score = document.createElement("h1");
-        player1Score.classList.add("score");
-        player1Score.id = "player1Score";
-        player1Score.textContent = "0";
+    function Ball(pos, velocity, radius) {
+      this.pos = pos;
+      this.velocity = velocity;
+      this.radius = radius;
 
-        // Create player 2 score element
-        const player2Score = document.createElement("h1");
-        player2Score.classList.add("score");
-        player2Score.id = "player2Score";
-        player2Score.textContent = "0";
+      this.update = function () {
+        this.pos.x += this.velocity.x;
+        this.pos.y += this.velocity.y;
+      };
 
-        // Append elements to container
-        container.appendChild(canvas);
-        container.appendChild(player1Score);
-        container.appendChild(player2Score);
-
-        // Append container to the document body or any desired parent element
-        document.getElementById("app").appendChild(container);
-        const ctx = canvas.getContext('2d');
-
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        const keysPressed = [];
-        const KEY_UP = 38;
-        const KEY_DOWN = 40;
+      this.draw = function () {
+        ctx.fillStyle = "#33ff00";
+        ctx.strokeStyle = "#33ff00";
+        ctx.beginPath();
+        ctx.arc(this.pos.x, this.pos.y, this.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+      };
 
 
-        window.addEventListener('keydown', function (e) {
-            keysPressed[e.keyCode] = true;
-        });
 
-        window.addEventListener('keyup', function (e) {
-            keysPressed[e.keyCode] = false;
-        });
+    }
 
-        function vec2(x, y) {
-            return { x: x, y: y };
+    function Paddle(pos, velocity, width, height) {
+      this.pos = pos;
+      this.velocity = velocity;
+      this.width = width;
+      this.height = height;
+      this.score =0;
+
+      this.update = function () { 
+        if (keysPressed[KEY_UP]) {
+            this.pos.y -= this.velocity.y;
         }
 
-        function Ball(pos, velocity, radius) {
-            this.pos = pos;
-            this.velocity = velocity;
-            this.radius = radius;
-
-            this.update = function () {
-                this.pos.x += this.velocity.x;
-                this.pos.y += this.velocity.y;
-            };
-
-            this.draw = function () {
-                ctx.fillStyle = "#33ff00";
-                ctx.strokeStyle = "#33ff00";
-                ctx.beginPath();
-                ctx.arc(this.pos.x, this.pos.y, this.radius, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.stroke();
-            };
-
-
-
+        if (keysPressed[KEY_DOWN]) {
+            this.pos.y += this.velocity.y;
         }
 
-        function Paddle(pos, velocity, width, height) {
-            this.pos = pos;
-            this.velocity = velocity;
-            this.width = width;
-            this.height = height;
-            this.score =0;
-
-            this.update = function () { 
-                if (keysPressed[KEY_UP]) {
-                    this.pos.y -= this.velocity.y;
-                }
-
-                if (keysPressed[KEY_DOWN]) {
-                    this.pos.y += this.velocity.y;
-                }
 
 
+      };
 
-            };
+      this.draw = function () {
+        ctx.fillStyle = "#33ff00";
+        ctx.beginPath();
+        ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
+      };
 
-            this.draw = function () {
-                ctx.fillStyle = "#33ff00";
-                ctx.beginPath();
-                ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
-            };
+      this.getHalfwidth = function () {
+        return this.width / 2;
+      };
+      this.getHalfHeight = function () {
+        return this.height / 2;
+      };
+      this.getCenter = function () {
+        return vec2(
+            this.pos.x + this.getHalfwidth(), 
+            this.pos.y + this.getHalfHeight(),
+        );
 
-            this.getHalfwidth = function () {
-                return this.width / 2;
-            };
-            this.getHalfHeight = function () {
-                return this.height / 2;
-            };
-            this.getCenter = function () {
-                return vec2(
-                    this.pos.x + this.getHalfwidth(), 
-                    this.pos.y + this.getHalfHeight(),
-                );
-
-            };
+      };
             
-        }
+    }
 
     function paddleCollisionWithTheEdges(paddle) {
         if (paddle.pos.y <= 0) {
             paddle.pos.y = 0;
         }
-        if (paddle.pos.y + paddle.height >= canvas.height) {
+                if (paddle.pos.y + paddle.height >= canvas.height) {
             paddle.pos.y = canvas.height - paddle.height;
         }
     }
 
-        function ballCollisionWithTheEdges(ball) {
-            if (ball.pos.y + ball.radius >= canvas.height) {
-                ball.velocity.y *= -1;
-            }
-
-            if (ball.pos.y - ball.radius <= 0) {
-                ball.velocity.y *= -1;
-            }
-
+    function ballCollisionWithTheEdges(ball) {
+        if (ball.pos.y + ball.radius >= canvas.height) {
+            ball.velocity.y *= -1;
         }
 
-        function ballPaddleCollision(ball, paddle)
+        if (ball.pos.y - ball.radius <= 0) {
+            ball.velocity.y *= -1;
+        }
+
+    }
+
+    function ballPaddleCollision(ball, paddle)
         {
             let dx = Math.abs(ball.pos.x - paddle.getCenter().x);
             let dy = Math.abs(ball.pos.y - paddle.getCenter().y);
@@ -218,13 +217,13 @@ export default class PingPongGame extends Application {
             ctx.stroke();
 
             ctx.beginPath();
-            ctx.linewidth = 15;
+            ctx.lineWidth = 15;
             ctx.moveTo(canvas.width, 0);
             ctx.lineTo(canvas.width, canvas.height);
             ctx.stroke();
 
             ctx.beginPath();
-            ctx.linewidth = 10;
+            ctx.lineWidth = 10;
             ctx.moveTo(canvas.width / 2, 0);
             ctx.lineTo(canvas.width / 2, canvas.height);
             ctx.stroke();
@@ -244,7 +243,7 @@ export default class PingPongGame extends Application {
 
             paddleCollisionWithTheEdges(paddle1);
             ballCollisionWithTheEdges(ball);
-            player2A1(ball,paddle2);
+            player2A1(ball, paddle2);
 
             ballPaddleCollision(ball, paddle1);
             ballPaddleCollision(ball, paddle2);
@@ -273,3 +272,4 @@ export default class PingPongGame extends Application {
 
     }
 }
+

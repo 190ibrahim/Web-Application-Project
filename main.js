@@ -42,31 +42,3 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
-
-
-
-// toast
-function showToast(message, duration) {
-  const toast = document.createElement('div');
-  toast.classList.add('toast');
-  toast.textContent = message;
-
-  document.body.appendChild(toast);
-
-  setTimeout(function () {
-    toast.classList.add('show');
-  }, 100);
-
-  setTimeout(function () {
-    toast.classList.remove('show');
-    setTimeout(function () {
-      document.body.removeChild(toast);
-    }, 300);
-  }, duration);
-}
-
-// Usage example
-const statusElement = document.getElementById('status');
-statusElement.addEventListener('click', function () {
-  showToast('This is a toast notification!', 2000);
-});
