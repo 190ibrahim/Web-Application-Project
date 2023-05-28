@@ -26,10 +26,22 @@ export default class PingPongGame extends Application {
     player2Score.id = "player2Score";
     player2Score.textContent = "0";
 
+    // Create multiplayer button
+    const multiplayerButton = document.createElement("button");
+    multiplayerButton.textContent = "Multiplayer";
+    multiplayerButton.classList.add("button");
+
+    // Create AI player button
+    const aiPlayerButton = document.createElement("button");
+    aiPlayerButton.textContent = "AI Player";
+    aiPlayerButton.classList.add("button");
+
     // Append elements to container
     container.appendChild(canvas);
     container.appendChild(player1Score);
     container.appendChild(player2Score);
+    container.appendChild(multiplayerButton);
+    container.appendChild(aiPlayerButton);
 
     // Append container to the document body or any desired parent element
     document.getElementById("app").appendChild(container);
@@ -124,7 +136,7 @@ export default class PingPongGame extends Application {
         if (paddle.pos.y <= 0) {
             paddle.pos.y = 0;
         }
-                if (paddle.pos.y + paddle.height >= canvas.height) {
+                if (paddle.pos.y + paddle.height >=canvas.height) {
             paddle.pos.y = canvas.height - paddle.height;
         }
     }
