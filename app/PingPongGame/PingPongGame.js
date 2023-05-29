@@ -29,19 +29,24 @@ export default class PingPongGame extends Application {
     // Create multiplayer button
     const multiplayerButton = document.createElement("button");
     multiplayerButton.textContent = "Multiplayer";
-    multiplayerButton.classList.add("button");
+    multiplayerButton.classList.add("button", "mode-btn");
+    multiplayerButton.style.left = "0";
 
     // Create AI player button
     const aiPlayerButton = document.createElement("button");
     aiPlayerButton.textContent = "AI Player";
-    aiPlayerButton.classList.add("button");
+    aiPlayerButton.classList.add("button", "mode-btn");
+aiPlayerButton.style.right = "0";
+
 
     // Append elements to container
+            container.appendChild(multiplayerButton);
+    container.appendChild(aiPlayerButton);
     container.appendChild(canvas);
+
     container.appendChild(player1Score);
     container.appendChild(player2Score);
-    container.appendChild(multiplayerButton);
-    container.appendChild(aiPlayerButton);
+
 
     // Append container to the document body or any desired parent element
     document.getElementById("app").appendChild(container);
@@ -195,16 +200,15 @@ export default class PingPongGame extends Application {
     function increaseScore(ball, paddlel, paddle2) {
         if (ball.pos.x <= -ball.radius) {
             paddle2.score += 1;
-            document.getElementById("player2Score").innerHTML = paddle2.score;
+document.getElementById("player2Score").textContent = paddle2.score;
             respawnBall(ball);
-        }
-        if (ball.pos.x >= canvas.width + ball.radius) {
+        } else if (ball.pos.x >= canvas.width + ball.radius) {
             paddle1.score += 1;
-            document.getElementById("player1Score").innerHTML = paddle1.score;
+document.getElementById("player1Score").textContent = paddle1.score;
             respawnBall(ball);
-
         }
     }
+
 
         function drawGameScene()
         {
