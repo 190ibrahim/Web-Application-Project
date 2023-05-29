@@ -57,6 +57,8 @@ export default class PingPongGame extends Application {
     const keysPressed = [];
     const KEY_UP = 38;
     const KEY_DOWN = 40;
+    const KEY_W = 87; // W key
+    const KEY_S = 83; // S key
 
     let isMultiplayer = false;
     let isAIPlayer = false;
@@ -103,20 +105,23 @@ export default class PingPongGame extends Application {
       };
     }
 
-    function Paddle(pos, velocity, width, height) {
+    function Paddle(pos, velocity, width, height, upKey, downKey) {
       this.pos = pos;
       this.velocity = velocity;
       this.width = width;
       this.height = height;
       this.score = 0;
+      this.upKey = upKey;
+      this.downKey = downKey;
+
 
       this.update = function () {
         if (isMultiplayer) {
-          if (keysPressed[KEY_UP]) {
+          if (keysPressed[this.upKey]) {
             this.pos.y -= this.velocity.y;
           }
 
-          if (keysPressed[KEY_DOWN]) {
+          if (keysPressed[this.downKey]) {
             this.pos.y += this.velocity.y;
           }
         } else if (isAIPlayer) {
@@ -260,8 +265,8 @@ export default class PingPongGame extends Application {
     }
 
     const ball = new Ball(vec2(200, 200), vec2(10, 10), 20);
-    const paddle1 = new Paddle(vec2(0, 50), vec2(15, 15), 20, 160);
-    const paddle2 = new Paddle(vec2(canvas.width - 20, 30), vec2(15, 15), 20, 160);
+    const paddle1 = new Paddle(vec2(0, 50), vec2(15, 15), 20, 160, KEY_W, KEY_S);
+    const paddle2 = new Paddle(vec2(canvas.width - 20, 30), vec2(15, 15), 20, 160, KEY_UP, KEY_DOWN);
 
     function gameUpdate() {
       ball.update();
