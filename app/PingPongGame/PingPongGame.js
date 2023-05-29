@@ -31,26 +31,25 @@ export default class PingPongGame extends Application {
     multiplayerButton.textContent = "Multiplayer";
     multiplayerButton.classList.add("button", "mode-btn");
     multiplayerButton.style.left = "0";
+    multiplayerButton.id = "multiplayer";
 
     // Create AI player button
     const aiPlayerButton = document.createElement("button");
     aiPlayerButton.textContent = "AI Player";
     aiPlayerButton.classList.add("button", "mode-btn");
-aiPlayerButton.style.right = "0";
-
+    aiPlayerButton.style.right = "0";
+    aiPlayerButton.id = "aiPlayer";
 
     // Append elements to container
-            container.appendChild(multiplayerButton);
+    container.appendChild(multiplayerButton);
     container.appendChild(aiPlayerButton);
     container.appendChild(canvas);
-
     container.appendChild(player1Score);
     container.appendChild(player2Score);
 
-
     // Append container to the document body or any desired parent element
     document.getElementById("app").appendChild(container);
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
 
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -59,12 +58,24 @@ aiPlayerButton.style.right = "0";
     const KEY_UP = 38;
     const KEY_DOWN = 40;
 
+    let isMultiplayer = false;
+    let isAIPlayer = false;
 
-    window.addEventListener('keydown', function (e) {
+    multiplayerButton.addEventListener("click", function () {
+      isMultiplayer = true;
+      isAIPlayer = false;
+    });
+
+    aiPlayerButton.addEventListener("click", function () {
+      isMultiplayer = false;
+      isAIPlayer = true;
+    });
+
+    window.addEventListener("keydown", function (e) {
       keysPressed[e.keyCode] = true;
     });
 
-    window.addEventListener('keyup', function (e) {
+    window.addEventListener("keyup", function (e) {
       keysPressed[e.keyCode] = false;
     });
 
@@ -90,9 +101,6 @@ aiPlayerButton.style.right = "0";
         ctx.fill();
         ctx.stroke();
       };
-
-
-
     }
 
     function Paddle(pos, velocity, width, height) {
@@ -100,19 +108,26 @@ aiPlayerButton.style.right = "0";
       this.velocity = velocity;
       this.width = width;
       this.height = height;
-      this.score =0;
+      this.score = 0;
 
-      this.update = function () { 
-        if (keysPressed[KEY_UP]) {
+      this.update = function () {
+        if (isMultiplayer) {
+          if (keysPressed[KEY_UP]) {
             this.pos.y -= this.velocity.y;
-        }
+          }
 
-        if (keysPressed[KEY_DOWN]) {
+          if (keysPressed[KEY_DOWN]) {
             this.pos.y += this.velocity.y;
+          }
+        } else if (isAIPlayer) {
+          if (keysPressed[KEY_UP]) {
+            this.pos.y -= this.velocity.y;
+          }
+
+          if (keysPressed[KEY_DOWN]) {
+            this.pos.y += this.velocity.y;
+          }
         }
-
-
-
       };
 
       this.draw = function () {
@@ -124,168 +139,166 @@ aiPlayerButton.style.right = "0";
       this.getHalfwidth = function () {
         return this.width / 2;
       };
+
       this.getHalfHeight = function () {
         return this.height / 2;
       };
-      this.getCenter = function () {
-        return vec2(
-            this.pos.x + this.getHalfwidth(), 
-            this.pos.y + this.getHalfHeight(),
-        );
 
+      this.getCenter = function () {
+        return vec2(this.pos.x + this.getHalfwidth(), this.pos.y + this.getHalfHeight());
       };
-            
     }
 
     function paddleCollisionWithTheEdges(paddle) {
-        if (paddle.pos.y <= 0) {
-            paddle.pos.y = 0;
-        }
-                if (paddle.pos.y + paddle.height >=canvas.height) {
-            paddle.pos.y = canvas.height - paddle.height;
-        }
+      if (paddle.pos.y <= 0) {
+        paddle.pos.y = 0;
+      }
+      if (paddle.pos.y + paddle.height >= canvas.height) {
+        paddle.pos.y = canvas.height - paddle.height;
+      }
     }
 
     function ballCollisionWithTheEdges(ball) {
-        if (ball.pos.y + ball.radius >= canvas.height) {
-            ball.velocity.y *= -1;
-        }
+      if (ball.pos.y + ball.radius >= canvas.height) {
+        ball.velocity.y *= -1;
+      }
 
-        if (ball.pos.y - ball.radius <= 0) {
-            ball.velocity.y *= -1;
-        }
-
+      if (ball.pos.y - ball.radius <= 0) {
+        ball.velocity.y *= -1;
+      }
     }
 
-    function ballPaddleCollision(ball, paddle)
-        {
-            let dx = Math.abs(ball.pos.x - paddle.getCenter().x);
-            let dy = Math.abs(ball.pos.y - paddle.getCenter().y);
-            if (dx <= (ball.radius + paddle.getHalfwidth()) && dy <= (paddle.getHalfHeight() + ball.radius)) {
-                ball.velocity.x *= -1;
-            }
-        }
+    function ballPaddleCollision(ball, paddle) {
+      let dx = Math.abs(ball.pos.x - paddle.getCenter().x);
+      let dy = Math.abs(ball.pos.y - paddle.getCenter().y);
+      if (
+        dx <= ball.radius + paddle.getHalfwidth() &&
+        dy <= paddle.getHalfHeight() + ball.radius
+      ) {
+        ball.velocity.x *= -1;
+      }
+    }
 
-    function player2A1(ball, paddle)
-    {
-        if (ball.velocity.x > 0) {
-            if (ball.pos.y > paddle.pos.y) {
-                paddle.pos.y += paddle.velocity.y;
-                if (paddle.pos.y + paddle.height >= canvas.height) {
-                    paddle.pos.y = canvas.height - paddle.height;
-                }
-            }
-            if (ball.pos.y < paddle.pos.y) {
-                paddle.pos.y -= paddle.velocity.y;
-                if (paddle.pos.y <= 0) {
-                    paddle.pos.y = 0;
-                }
-            }
+    function player2A1(ball, paddle) {
+      if (ball.velocity.x > 0) {
+        if (ball.pos.y > paddle.pos.y) {
+          paddle.pos.y += paddle.velocity.y;
+          if (paddle.pos.y + paddle.height >= canvas.height) {
+            paddle.pos.y = canvas.height - paddle.height;
+          }
         }
+        if (ball.pos.y < paddle.pos.y) {
+          paddle.pos.y -= paddle.velocity.y;
+          if (paddle.pos.y <= 0) {
+            paddle.pos.y = 0;
+          }
+        }
+      }
     }
 
     function respawnBall(ball) {
-        if (ball.velocity.x > 0) {
-            ball.pos.x = canvas.width - 150;
-            ball.pos.y = (Math.random() * (canvas.height - 200)) + 100;
-        }
-        if (ball.velocity.x < 0) {
-            ball.pos.x = 150;
-            ball.pos.y = (Math.random() * (canvas.height - 200)) + 100;
-        }
-        ball.velocity.x *= -1;
-        ball.velocity.y *= 1;
+      if (ball.velocity.x > 0) {
+        ball.pos.x = canvas.width - 150;
+        ball.pos.y = Math.random() * (canvas.height - 200) + 100;
+      }
+      if (ball.velocity.x < 0) {
+        ball.pos.x = 150;
+        ball.pos.y = Math.random() * (canvas.height - 200) + 100;
+      }
+      ball.velocity.x *= -1;
+      ball.velocity.y *= 1;
     }
 
-    function increaseScore(ball, paddlel, paddle2) {
-        if (ball.pos.x <= -ball.radius) {
-            paddle2.score += 1;
-document.getElementById("player2Score").textContent = paddle2.score;
-            respawnBall(ball);
-        } else if (ball.pos.x >= canvas.width + ball.radius) {
-            paddle1.score += 1;
-document.getElementById("player1Score").textContent = paddle1.score;
-            respawnBall(ball);
-        }
+    function increaseScore(ball, paddle1, paddle2) {
+      if (ball.pos.x <= -ball.radius) {
+        paddle2.score += 1;
+        document.getElementById("player2Score").textContent = paddle2.score;
+        respawnBall(ball);
+      } else if (ball.pos.x >= canvas.width + ball.radius) {
+        paddle1.score += 1;
+        document.getElementById("player1Score").textContent = paddle1.score;
+        respawnBall(ball);
+      }
     }
 
+    function drawGameScene() {
+      ctx.strokeStyle = "#ffff00";
 
-        function drawGameScene()
-        {
-            ctx.strokeStyle = "#ffff00";
+      ctx.beginPath();
+      ctx.lineWidth = 20;
+      ctx.moveTo(0, 0);
+      ctx.lineTo(canvas.width, 0);
+      ctx.stroke();
 
-            ctx.beginPath();
-            ctx.linewidth = 20;
-            ctx.moveTo(0, 0);
-            ctx.lineTo(canvas.width, 0);
-            ctx.stroke();
+      ctx.beginPath();
+      ctx.lineWidth = 20;
+      ctx.moveTo(0, canvas.height);
+      ctx.lineTo(canvas.width, canvas.height);
+      ctx.stroke();
 
-            ctx.beginPath();
-            ctx.linewidth = 20;
-            ctx.moveTo(0, canvas.height);
-            ctx.lineTo(canvas.width, canvas.height);
-            ctx.stroke();
+      ctx.beginPath();
+      ctx.lineWidth = 15;
+      ctx.moveTo(0, 0);
+      ctx.lineTo(0, canvas.height);
+      ctx.stroke();
 
-            ctx.beginPath();
-            ctx.lineWidth = 15;
-            ctx.moveTo(0, 0);
-            ctx.lineTo(0, canvas.height);
-            ctx.stroke();
+      ctx.beginPath();
+      ctx.lineWidth = 15;
+      ctx.moveTo(canvas.width, 0);
+      ctx.lineTo(canvas.width, canvas.height);
+      ctx.stroke();
 
-            ctx.beginPath();
-            ctx.lineWidth = 15;
-            ctx.moveTo(canvas.width, 0);
-            ctx.lineTo(canvas.width, canvas.height);
-            ctx.stroke();
+      ctx.beginPath();
+      ctx.lineWidth = 10;
+      ctx.moveTo(canvas.width / 2, 0);
+      ctx.lineTo(canvas.width / 2, canvas.height);
+      ctx.stroke();
 
-            ctx.beginPath();
-            ctx.lineWidth = 10;
-            ctx.moveTo(canvas.width / 2, 0);
-            ctx.lineTo(canvas.width / 2, canvas.height);
-            ctx.stroke();
-
-            ctx.beginPath();
-            ctx.arc(canvas.width / 2, canvas.height / 2, 50, 0, Math.PI * 2);
-            ctx.stroke();
-        }
-
-        const ball = new Ball(vec2(200, 200), vec2(10, 10), 20);
-        const paddle1 = new Paddle(vec2(0, 50), vec2(15, 15), 20, 160);
-        const paddle2 = new Paddle(vec2(canvas.width - 20, 30), vec2(15, 15), 20, 160);
-
-        function gameUpdate() {
-            ball.update();
-            paddle1.update();
-
-            paddleCollisionWithTheEdges(paddle1);
-            ballCollisionWithTheEdges(ball);
-            player2A1(ball, paddle2);
-
-            ballPaddleCollision(ball, paddle1);
-            ballPaddleCollision(ball, paddle2);
-
-            increaseScore(ball, paddle1, paddle2);
-        }
-
-        function gameDraw() {
-            ball.draw();
-            paddle1.draw();
-            paddle2.draw();
-            drawGameScene();
-        }
-
-        function gameLoop() {
-            // ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            window.requestAnimationFrame(gameLoop);
-
-            gameUpdate();
-            gameDraw();
-        }
-
-        gameLoop();
-
+      ctx.beginPath();
+      ctx.arc(canvas.width / 2, canvas.height / 2, 50, 0, Math.PI * 2);
+      ctx.stroke();
     }
+
+    const ball = new Ball(vec2(200, 200), vec2(10, 10), 20);
+    const paddle1 = new Paddle(vec2(0, 50), vec2(15, 15), 20, 160);
+    const paddle2 = new Paddle(vec2(canvas.width - 20, 30), vec2(15, 15), 20, 160);
+
+    function gameUpdate() {
+      ball.update();
+      paddle1.update();
+
+      paddleCollisionWithTheEdges(paddle1);
+      ballCollisionWithTheEdges(ball);
+
+      if (isMultiplayer) {
+        paddle2.update();
+        paddleCollisionWithTheEdges(paddle2);
+      } else if (isAIPlayer) {
+        player2A1(ball, paddle2);
+      }
+
+      ballPaddleCollision(ball, paddle1);
+      ballPaddleCollision(ball, paddle2);
+
+      increaseScore(ball, paddle1, paddle2);
+    }
+
+    function gameDraw() {
+      ball.draw();
+      paddle1.draw();
+      paddle2.draw();
+      drawGameScene();
+    }
+
+    function gameLoop() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      window.requestAnimationFrame(gameLoop);
+
+      gameUpdate();
+      gameDraw();
+    }
+
+    gameLoop();
+  }
 }
-
