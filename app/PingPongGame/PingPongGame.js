@@ -103,7 +103,7 @@ resetButton.addEventListener("click", () => {
     const paddle1 = new Paddle(vec2(0, 50), vec2(15, 15), 20, 160, KEY_W, KEY_S);
     const paddle2 = new Paddle(vec2(canvas.width - 20, 30), vec2(15, 15), 20, 160, KEY_UP, KEY_DOWN);
 
-    const gameLogic = new GameLogic(ball, paddle1, paddle2);
+    const gameLogic = new GameLogic(ball, paddle1, paddle2, canvas);
     const renderer = new Renderer(ctx, canvas);
 
 function gameUpdate() {
