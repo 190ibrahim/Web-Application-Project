@@ -1,16 +1,12 @@
 import Application from "../Application.js";
 import Ball from "./Ball.js";
 import Paddle from "./Paddle.js";
-
+import GameLogic from "./GameLogic.js";
+import Renderer from "./Renderer.js";
+import InputHandler from "./InputHandler.js";
 
 export default class PingPongGame extends Application {
-  
-  static GameState = {
-    MENU: "menu",
-    GAMEPLAY: "gameplay",
-    PAUSE: "pause",
-    GAME_OVER: "gameover"
-  };
+
 
   init() {
     super.init();
@@ -51,9 +47,16 @@ export default class PingPongGame extends Application {
     aiPlayerButton.style.right = "0";
     aiPlayerButton.id = "aiPlayer";
 
+    const resetButton = document.createElement("button");
+    resetButton.textContent = "Reset";
+    resetButton.classList.add("button", "mode-btn");
+    resetButton.style.left = "45%";
+    resetButton.id = "reset";
+
     // Append elements to container
     container.appendChild(multiplayerButton);
     container.appendChild(aiPlayerButton);
+    container.appendChild(resetButton);
     container.appendChild(canvas);
     container.appendChild(player1Score);
     container.appendChild(player2Score);
@@ -64,6 +67,7 @@ export default class PingPongGame extends Application {
 
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    const inputHandler = new InputHandler();
 
     const keysPressed = [];
     const KEY_UP = 38;
@@ -74,182 +78,50 @@ export default class PingPongGame extends Application {
     let isMultiplayer = false;
     let isAIPlayer = false;
 
-    multiplayerButton.addEventListener("click", function () {
-      isMultiplayer = true;
-      isAIPlayer = false;
+
+    multiplayerButton.addEventListener("click", () => {
+      inputHandler.setMultiplayerMode();
     });
 
-    aiPlayerButton.addEventListener("click", function () {
-      isMultiplayer = false;
-      isAIPlayer = true;
+    aiPlayerButton.addEventListener("click", () => {
+      inputHandler.setAIPlayerMode();
     });
 
-    window.addEventListener("keydown", function (e) {
-      keysPressed[e.keyCode] = true;
-    });
+resetButton.addEventListener("click", () => {
+  inputHandler.setResetButtonClicked();
+});
 
-    window.addEventListener("keyup", function (e) {
-      keysPressed[e.keyCode] = false;
-    });
+
 
     function vec2(x, y) {
       return { x: x, y: y };
     }
 
-
-
-    function paddleCollisionWithTheEdges(paddle) {
-      if (paddle.pos.y <= 0) {
-        paddle.pos.y = 0;
-      }
-      if (paddle.pos.y + paddle.height >= canvas.height) {
-        paddle.pos.y = canvas.height - paddle.height;
-      }
-    }
-
-    function ballCollisionWithTheEdges(ball) {
-      if (ball.pos.y + ball.radius >= canvas.height) {
-        ball.velocity.y *= -1;
-      }
-
-      if (ball.pos.y - ball.radius <= 0) {
-        ball.velocity.y *= -1;
-      }
-    }
-
-  function ballPaddleCollision(ball, paddle) {
-    let dx = Math.abs(ball.pos.x - paddle.getCenter().x);
-    let dy = Math.abs(ball.pos.y - paddle.getCenter().y);
-    if (
-      dx <= ball.radius + paddle.getHalfWidth() &&
-      dy <= paddle.getHalfHeight() + ball.radius
-    ) {
-      ball.velocity.x *= -1;
-    }
-  }
-
-    function player2A1(ball, paddle) {
-      if (ball.velocity.x > 0) {
-        if (ball.pos.y > paddle.pos.y) {
-          paddle.pos.y += paddle.velocity.y;
-          if (paddle.pos.y + paddle.height >= canvas.height) {
-            paddle.pos.y = canvas.height - paddle.height;
-          }
-        }
-        if (ball.pos.y < paddle.pos.y) {
-          paddle.pos.y -= paddle.velocity.y;
-          if (paddle.pos.y <= 0) {
-            paddle.pos.y = 0;
-          }
-        }
-      }
-    }
-
-    function respawnBall(ball) {
-      if (ball.velocity.x > 0) {
-        ball.pos.x = canvas.width - 150;
-        ball.pos.y = Math.random() * (canvas.height - 200) + 100;
-      }
-      if (ball.velocity.x < 0) {
-        ball.pos.x = 150;
-        ball.pos.y = Math.random() * (canvas.height - 200) + 100;
-      }
-      ball.velocity.x *= -1;
-      ball.velocity.y *= 1;
-    }
-
-    function increaseScore(ball, paddle1, paddle2) {
-      if (ball.pos.x <= -ball.radius) {
-        paddle2.score += 1;
-        document.getElementById("player2Score").textContent = paddle2.score;
-        respawnBall(ball);
-      } else if (ball.pos.x >= canvas.width + ball.radius) {
-        paddle1.score += 1;
-        document.getElementById("player1Score").textContent = paddle1.score;
-        respawnBall(ball);
-      }
-    }
-
-    function drawGameScene() {
-      ctx.strokeStyle = "#ffff00";
-
-      ctx.beginPath();
-      ctx.lineWidth = 20;
-      ctx.moveTo(0, 0);
-      ctx.lineTo(canvas.width, 0);
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.lineWidth = 20;
-      ctx.moveTo(0, canvas.height);
-      ctx.lineTo(canvas.width, canvas.height);
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.lineWidth = 15;
-      ctx.moveTo(0, 0);
-      ctx.lineTo(0, canvas.height);
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.lineWidth = 15;
-      ctx.moveTo(canvas.width, 0);
-      ctx.lineTo(canvas.width, canvas.height);
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.lineWidth = 10;
-      ctx.moveTo(canvas.width / 2, 0);
-      ctx.lineTo(canvas.width / 2, canvas.height);
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.arc(canvas.width / 2, canvas.height / 2, 50, 0, Math.PI * 2);
-      ctx.stroke();
-    }
+    
 
     const ball = new Ball(vec2(200, 200), vec2(10, 10), 20);
     const paddle1 = new Paddle(vec2(0, 50), vec2(15, 15), 20, 160, KEY_W, KEY_S);
     const paddle2 = new Paddle(vec2(canvas.width - 20, 30), vec2(15, 15), 20, 160, KEY_UP, KEY_DOWN);
 
-    function gameUpdate() {
-      ball.update();
-      paddle1.update(keysPressed, isMultiplayer, isAIPlayer);
-      paddleCollisionWithTheEdges(paddle1);
-      ballCollisionWithTheEdges(ball);
+    const gameLogic = new GameLogic(ball, paddle1, paddle2);
+    const renderer = new Renderer(ctx, canvas);
 
-      if (isMultiplayer) {
-        paddle2.update(keysPressed, isMultiplayer, isAIPlayer);
-        paddleCollisionWithTheEdges(paddle2);
-      } else if (isAIPlayer) {
-        player2A1(ball, paddle2);
-      }
+function gameUpdate() {
+  const keysPressed = inputHandler.getKeysPressed();
+  const isMultiplayer = inputHandler.isMultiplayerMode();
+  const isAIPlayer = inputHandler.isAIPlayerMode();
+  const isResetButtonClicked = inputHandler.isResetButtonClicked;
 
-      ballPaddleCollision(ball, paddle1);
-      ballPaddleCollision(ball, paddle2);
-
-      increaseScore(ball, paddle1, paddle2);
-    }
+  gameLogic.update(keysPressed, isMultiplayer, isAIPlayer, isResetButtonClicked);
+}
 
 
-    function gameDraw() {
-      ball.draw(ctx);
-      paddle1.draw(ctx);
-      paddle2.draw(ctx);
-      drawGameScene(ctx, canvas);
-    }
-    
-    function draw() {
-      // Perform drawing operations on the offscreen canvas
-      ctx.fillStyle = "rgba(25, 30, 36, 0.2)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Call your gameDraw function to draw the game elements
-      gameDraw(ctx);
+function draw() {
+  renderer.draw(ball, paddle1, paddle2);
+}
 
-      // Copy the offscreen canvas to the visible canvas
-      ctx.drawImage(canvas, 0, 0);
-    }
+
     function gameLoop() {
 
       window.requestAnimationFrame(gameLoop);
