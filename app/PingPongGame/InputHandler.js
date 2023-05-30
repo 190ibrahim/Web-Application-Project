@@ -4,9 +4,7 @@ export default class InputHandler {
     this.keysPressed = [];
     this.isMultiplayer = false;
     this.isAIPlayer = false;
-    this.resetButtonClicked  = false;
     this.isPauseButtonClicked = false;
-
     window.addEventListener("keydown", (e) => {
       this.keysPressed[e.keyCode] = true;
     });
@@ -14,6 +12,8 @@ export default class InputHandler {
     window.addEventListener("keyup", (e) => {
       this.keysPressed[e.keyCode] = false;
     });
+
+
   }
 
   setMultiplayerMode() {
@@ -24,14 +24,6 @@ export default class InputHandler {
   setAIPlayerMode() {
     this.isAIPlayer = true;
     this.isMultiplayer = false; // Reset multiplayer mode
-  }
-
-  setResetButtonClicked() {
-    this.resetButtonClicked  = true;
-  }
-
-  resetResetButtonClicked() {
-    this.resetButtonClicked  = false;
   }
 
   setPauseButtonClicked() {
@@ -47,7 +39,6 @@ export default class InputHandler {
     this.keysPressed = [];
     this.isMultiplayer = false;
     this.isAIPlayer = false;
-    this.resetResetButtonClicked();
   }
 
   getKeysPressed() {
@@ -61,11 +52,6 @@ export default class InputHandler {
   isAIPlayerMode() {
     return this.isAIPlayer;
   }
-
-  isResetButtonClicked() {
-    return this.resetButtonClicked ;
-  }
-
 
   isPauseButtonClicked() {
     return this.isPauseButtonClicked;

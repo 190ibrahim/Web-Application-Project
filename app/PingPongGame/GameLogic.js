@@ -7,7 +7,7 @@ export default class GameLogic {
     this.canvas = canvas;
   }
 
-  update(keysPressed, isMultiplayer, isAIPlayer, isResetButtonClicked) {
+  update(keysPressed, isMultiplayer, isAIPlayer) {
     this.ball.update();
     this.paddle1.update(keysPressed, isMultiplayer, isAIPlayer);
     this.paddleCollisionWithTheEdges(this.paddle1);
@@ -94,18 +94,6 @@ export default class GameLogic {
     }
 }
 
-
-  increaseScore(ball, paddle1, paddle2) {
-    if (ball.pos.x <= -ball.radius) {
-      paddle2.score += 1;
-      document.getElementById("player2Score").textContent = paddle2.score;
-      this.respawnBall(ball, this.canvas);
-    } else if (ball.pos.x >= this.canvas.width + ball.radius) {
-      paddle1.score += 1;
-      document.getElementById("player1Score").textContent = paddle1.score;
-      this.respawnBall(ball, this.canvas);
-    }
-  }
 
   respawnBall(ball, canvas) {
     if (ball.velocity.x > 0) {

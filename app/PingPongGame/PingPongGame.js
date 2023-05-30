@@ -78,14 +78,10 @@ export default class PingPongGame extends Application {
     canvas.height = window.innerHeight;
     const inputHandler = new InputHandler();
 
-    const keysPressed = [];
     const KEY_UP = 38;
     const KEY_DOWN = 40;
     const KEY_W = 87; // W key
     const KEY_S = 83; // S key
-
-    let isMultiplayer = false;
-    let isAIPlayer = false;
 
 
     multiplayerButton.addEventListener("click", () => {
@@ -94,10 +90,6 @@ export default class PingPongGame extends Application {
 
     aiPlayerButton.addEventListener("click", () => {
       inputHandler.setAIPlayerMode();
-    });
-
-    resetButton.addEventListener("click", () => {
-      inputHandler.setResetButtonClicked();
     });
 
     pauseButton.addEventListener("click", () => {
@@ -109,14 +101,9 @@ export default class PingPongGame extends Application {
       }
     });
 
-
-
-
     function vec2(x, y) {
       return { x: x, y: y };
     }
-
-    
 
     const ball = new Ball(vec2(200, 200), vec2(10, 10), 20);
     const paddle1 = new Paddle(vec2(0, 50), vec2(15, 15), 20, 160, KEY_W, KEY_S);
@@ -129,22 +116,16 @@ export default class PingPongGame extends Application {
       const keysPressed = inputHandler.getKeysPressed();
       const isMultiplayer = inputHandler.isMultiplayerMode();
       const isAIPlayer = inputHandler.isAIPlayerMode();
-      const isResetButtonClicked = inputHandler.isResetButtonClicked;
       const isPauseButtonClicked = inputHandler.isPauseButtonClicked;
 
       if (!isPauseButtonClicked) {
-        gameLogic.update(keysPressed, isMultiplayer, isAIPlayer, isResetButtonClicked);
+        gameLogic.update(keysPressed, isMultiplayer, isAIPlayer);
       }
     }
 
-
-
-
-
-function draw() {
-  renderer.draw(ball, paddle1, paddle2);
-}
-
+    function draw() {
+      renderer.draw(ball, paddle1, paddle2);
+    }
 
     function gameLoop() {
 
