@@ -19,20 +19,8 @@ body {
     height: 100vh;
 }
 
-.status-bar {
-    height: 2rem;
-    display: flex;
-    align-items: center;
-    border-top: 1px solid var(--border-color);
-}
 
-.status-bar>div {
-    margin-left: 10px;
-}
 
-.row {
-    width: 100%;
-}
 /* SIDEBAR-CONTAINER */
 .main-menu {
     width: 220px;
@@ -229,7 +217,6 @@ footer a {
     width: 900px;
     height: 400px;
     position: relative;
-    /* Updated background color */
 }
 
 #canvas {
@@ -240,10 +227,9 @@ footer a {
 
 .score {
     color: #fff;
-    font-family: sans-serif;
-    font-size: 4rem;
+    font-size: 3rem;
     position: absolute;
-    bottom: 100px;
+    bottom: 0px;
     left: 0;
     right: 0;
     text-align: center;
@@ -259,6 +245,7 @@ footer a {
     position: absolute;
     top: -50px;
     border-radius: 15px;
+    transition: background-color 0.3s ease;
 }
 
 .mode-btn:hover {

@@ -1,5 +1,9 @@
 import Application from "../Application.js";
 
+import Ball from "./Ball.js";
+import Paddle from "./Paddle.js";
+
+
 export default class PingPongGame extends Application {
   init() {
     super.init();
@@ -85,74 +89,7 @@ export default class PingPongGame extends Application {
       return { x: x, y: y };
     }
 
-    function Ball(pos, velocity, radius) {
-      this.pos = pos;
-      this.velocity = velocity;
-      this.radius = radius;
 
-      this.update = function () {
-        this.pos.x += this.velocity.x;
-        this.pos.y += this.velocity.y;
-      };
-
-      this.draw = function () {
-        ctx.fillStyle = "#33ff00";
-        ctx.strokeStyle = "#33ff00";
-        ctx.beginPath();
-        ctx.arc(this.pos.x, this.pos.y, this.radius, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-      };
-    }
-
-    function Paddle(pos, velocity, width, height, upKey, downKey) {
-      this.pos = pos;
-      this.velocity = velocity;
-      this.width = width;
-      this.height = height;
-      this.score = 0;
-      this.upKey = upKey;
-      this.downKey = downKey;
-
-
-      this.update = function () {
-        if (isMultiplayer) {
-          if (keysPressed[this.upKey]) {
-            this.pos.y -= this.velocity.y;
-          }
-
-          if (keysPressed[this.downKey]) {
-            this.pos.y += this.velocity.y;
-          }
-        } else if (isAIPlayer) {
-          if (keysPressed[KEY_UP]) {
-            this.pos.y -= this.velocity.y;
-          }
-
-          if (keysPressed[KEY_DOWN]) {
-            this.pos.y += this.velocity.y;
-          }
-        }
-      };
-
-      this.draw = function () {
-        ctx.fillStyle = "#33ff00";
-        ctx.beginPath();
-        ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
-      };
-
-      this.getHalfwidth = function () {
-        return this.width / 2;
-      };
-
-      this.getHalfHeight = function () {
-        return this.height / 2;
-      };
-
-      this.getCenter = function () {
-        return vec2(this.pos.x + this.getHalfwidth(), this.pos.y + this.getHalfHeight());
-      };
-    }
 
     function paddleCollisionWithTheEdges(paddle) {
       if (paddle.pos.y <= 0) {
@@ -173,16 +110,16 @@ export default class PingPongGame extends Application {
       }
     }
 
-    function ballPaddleCollision(ball, paddle) {
-      let dx = Math.abs(ball.pos.x - paddle.getCenter().x);
-      let dy = Math.abs(ball.pos.y - paddle.getCenter().y);
-      if (
-        dx <= ball.radius + paddle.getHalfwidth() &&
-        dy <= paddle.getHalfHeight() + ball.radius
-      ) {
-        ball.velocity.x *= -1;
-      }
+  function ballPaddleCollision(ball, paddle) {
+    let dx = Math.abs(ball.pos.x - paddle.getCenter().x);
+    let dy = Math.abs(ball.pos.y - paddle.getCenter().y);
+    if (
+      dx <= ball.radius + paddle.getHalfWidth() &&
+      dy <= paddle.getHalfHeight() + ball.radius
+    ) {
+      ball.velocity.x *= -1;
     }
+  }
 
     function player2A1(ball, paddle) {
       if (ball.velocity.x > 0) {
@@ -270,13 +207,12 @@ export default class PingPongGame extends Application {
 
     function gameUpdate() {
       ball.update();
-      paddle1.update();
-
+      paddle1.update(keysPressed, isMultiplayer, isAIPlayer);
       paddleCollisionWithTheEdges(paddle1);
       ballCollisionWithTheEdges(ball);
 
       if (isMultiplayer) {
-        paddle2.update();
+        paddle2.update(keysPressed, isMultiplayer, isAIPlayer);
         paddleCollisionWithTheEdges(paddle2);
       } else if (isAIPlayer) {
         player2A1(ball, paddle2);
@@ -288,11 +224,12 @@ export default class PingPongGame extends Application {
       increaseScore(ball, paddle1, paddle2);
     }
 
+
     function gameDraw() {
-      ball.draw();
-      paddle1.draw();
-      paddle2.draw();
-      drawGameScene();
+      ball.draw(ctx);
+      paddle1.draw(ctx);
+      paddle2.draw(ctx);
+      drawGameScene(ctx, canvas);
     }
 
     function gameLoop() {
