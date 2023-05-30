@@ -1,3 +1,4 @@
+// GameLogic.js
 export default class GameLogic {
   constructor(ball, paddle1, paddle2, canvas) {
     this.ball = ball;

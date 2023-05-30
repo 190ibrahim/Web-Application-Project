@@ -4,7 +4,8 @@ export default class InputHandler {
     this.keysPressed = [];
     this.isMultiplayer = false;
     this.isAIPlayer = false;
-    this.isResetButtonClicked = false;
+    this.resetButtonClicked  = false;
+    this.isPauseButtonClicked = false;
 
     window.addEventListener("keydown", (e) => {
       this.keysPressed[e.keyCode] = true;
@@ -26,12 +27,21 @@ export default class InputHandler {
   }
 
   setResetButtonClicked() {
-    this.isResetButtonClicked = true;
+    this.resetButtonClicked  = true;
   }
 
   resetResetButtonClicked() {
-    this.isResetButtonClicked = false;
+    this.resetButtonClicked  = false;
   }
+
+  setPauseButtonClicked() {
+    this.isPauseButtonClicked = true;
+  }
+
+  resetPauseButtonClicked() {
+    this.isPauseButtonClicked = false;
+  }
+
 
   reset() {
     this.keysPressed = [];
@@ -53,6 +63,15 @@ export default class InputHandler {
   }
 
   isResetButtonClicked() {
-    return this.isResetButtonClicked;
+    return this.resetButtonClicked ;
+  }
+
+
+  isPauseButtonClicked() {
+    return this.isPauseButtonClicked;
+  }
+
+  togglePauseButtonClicked() {
+    this.isPauseButtonClicked = !this.isPauseButtonClicked;
   }
 }

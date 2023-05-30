@@ -1,3 +1,4 @@
+// PingPongGame.js
 import Application from "../Application.js";
 import Ball from "./Ball.js";
 import Paddle from "./Paddle.js";
@@ -44,19 +45,27 @@ export default class PingPongGame extends Application {
     const aiPlayerButton = document.createElement("button");
     aiPlayerButton.textContent = "AI Player";
     aiPlayerButton.classList.add("button", "mode-btn");
-    aiPlayerButton.style.right = "0";
+    aiPlayerButton.style.left = "20%";
     aiPlayerButton.id = "aiPlayer";
 
     const resetButton = document.createElement("button");
     resetButton.textContent = "Reset";
     resetButton.classList.add("button", "mode-btn");
-    resetButton.style.left = "45%";
+    resetButton.style.right = "20%";
     resetButton.id = "reset";
+
+    // Create pause button element
+    const pauseButton = document.createElement("button");
+    pauseButton.textContent = "Pause";
+    pauseButton.classList.add("button", "mode-btn");
+    pauseButton.style.right = "0";
+    pauseButton.id = "pause";
 
     // Append elements to container
     container.appendChild(multiplayerButton);
     container.appendChild(aiPlayerButton);
     container.appendChild(resetButton);
+    container.appendChild(pauseButton);
     container.appendChild(canvas);
     container.appendChild(player1Score);
     container.appendChild(player2Score);
@@ -87,9 +96,19 @@ export default class PingPongGame extends Application {
       inputHandler.setAIPlayerMode();
     });
 
-resetButton.addEventListener("click", () => {
-  inputHandler.setResetButtonClicked();
-});
+    resetButton.addEventListener("click", () => {
+      inputHandler.setResetButtonClicked();
+    });
+
+    pauseButton.addEventListener("click", () => {
+      inputHandler.togglePauseButtonClicked();
+      if (inputHandler.isPauseButtonClicked) {
+        pauseButton.textContent = "Resume";
+      } else {
+        pauseButton.textContent = "Pause";
+      }
+    });
+
 
 
 
@@ -106,14 +125,19 @@ resetButton.addEventListener("click", () => {
     const gameLogic = new GameLogic(ball, paddle1, paddle2, canvas);
     const renderer = new Renderer(ctx, canvas);
 
-function gameUpdate() {
-  const keysPressed = inputHandler.getKeysPressed();
-  const isMultiplayer = inputHandler.isMultiplayerMode();
-  const isAIPlayer = inputHandler.isAIPlayerMode();
-  const isResetButtonClicked = inputHandler.isResetButtonClicked;
+    function gameUpdate() {
+      const keysPressed = inputHandler.getKeysPressed();
+      const isMultiplayer = inputHandler.isMultiplayerMode();
+      const isAIPlayer = inputHandler.isAIPlayerMode();
+      const isResetButtonClicked = inputHandler.isResetButtonClicked;
+      const isPauseButtonClicked = inputHandler.isPauseButtonClicked;
 
-  gameLogic.update(keysPressed, isMultiplayer, isAIPlayer, isResetButtonClicked);
-}
+      if (!isPauseButtonClicked) {
+        gameLogic.update(keysPressed, isMultiplayer, isAIPlayer, isResetButtonClicked);
+      }
+    }
+
+
 
 
 
