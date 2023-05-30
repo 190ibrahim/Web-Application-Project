@@ -1,10 +1,17 @@
 import Application from "../Application.js";
-
 import Ball from "./Ball.js";
 import Paddle from "./Paddle.js";
 
 
 export default class PingPongGame extends Application {
+  
+  static GameState = {
+    MENU: "menu",
+    GAMEPLAY: "gameplay",
+    PAUSE: "pause",
+    GAME_OVER: "gameover"
+  };
+
   init() {
     super.init();
     this.initDom();
@@ -231,14 +238,24 @@ export default class PingPongGame extends Application {
       paddle2.draw(ctx);
       drawGameScene(ctx, canvas);
     }
-
-    function gameLoop() {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
+    
+    function draw() {
+      // Perform drawing operations on the offscreen canvas
+      ctx.fillStyle = "rgba(25, 30, 36, 0.2)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Call your gameDraw function to draw the game elements
+      gameDraw(ctx);
+
+      // Copy the offscreen canvas to the visible canvas
+      ctx.drawImage(canvas, 0, 0);
+    }
+    function gameLoop() {
+
       window.requestAnimationFrame(gameLoop);
 
       gameUpdate();
-      gameDraw();
+      draw();
     }
 
     gameLoop();
