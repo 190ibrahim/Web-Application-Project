@@ -26,6 +26,27 @@ export default class GameLogic {
     this.increaseScore(this.ball, this.paddle1, this.paddle2);
   }
 
+  startCountdown(callback) {
+    let countdown = 3; // Initial countdown value
+    const countdownElement = document.getElementById("countdown");
+
+    // Countdown logic
+    function countdownLoop() {
+      if (countdown > 0) {
+        countdownElement.textContent = countdown;
+        countdown--;
+        setTimeout(countdownLoop, 1000); // Wait for 1 second
+      } else {
+        countdownElement.style.display = "none"; // Hide the countdown element
+        callback(); // Start the game loop
+      }
+    }
+
+    // Show the countdown element and start the countdown
+    countdownElement.style.display = "block";
+    countdownLoop();
+  }
+
   paddleCollisionWithTheEdges(paddle) {
     if (paddle.pos.y <= 0) {
       paddle.pos.y = 0;

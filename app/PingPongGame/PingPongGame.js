@@ -61,7 +61,11 @@ export default class PingPongGame extends Application {
     pauseButton.style.right = "0";
     pauseButton.id = "pause";
 
+ const countdownElement = document.createElement("div");
+  countdownElement.id = "countdown";
+
     // Append elements to container
+    container.appendChild(countdownElement);
     container.appendChild(multiplayerButton);
     container.appendChild(aiPlayerButton);
     container.appendChild(resetButton);
@@ -109,31 +113,36 @@ export default class PingPongGame extends Application {
     const paddle1 = new Paddle(vec2(0, 50), vec2(15, 15), 20, 160, KEY_W, KEY_S);
     const paddle2 = new Paddle(vec2(canvas.width - 20, 30), vec2(15, 15), 20, 160, KEY_UP, KEY_DOWN);
 
-    const gameLogic = new GameLogic(ball, paddle1, paddle2, canvas);
-    const renderer = new Renderer(ctx, canvas);
 
-    function gameUpdate() {
-      const keysPressed = inputHandler.getKeysPressed();
-      const isMultiplayer = inputHandler.isMultiplayerMode();
-      const isAIPlayer = inputHandler.isAIPlayerMode();
-      const isPauseButtonClicked = inputHandler.isPauseButtonClicked;
+  const gameLogic = new GameLogic(ball, paddle1, paddle2, canvas);
+  const renderer = new Renderer(ctx, canvas);
 
-      if (!isPauseButtonClicked) {
-        gameLogic.update(keysPressed, isMultiplayer, isAIPlayer);
-      }
+  function gameUpdate() {
+    const keysPressed = inputHandler.getKeysPressed();
+    const isMultiplayer = inputHandler.isMultiplayerMode();
+    const isAIPlayer = inputHandler.isAIPlayerMode();
+    const isPauseButtonClicked = inputHandler.isPauseButtonClicked;
+
+    if (!isPauseButtonClicked) {
+      gameLogic.update(keysPressed, isMultiplayer, isAIPlayer);
     }
 
-    function draw() {
-      renderer.draw(ball, paddle1, paddle2);
-    }
+  }
 
-    function gameLoop() {
+  function draw() {
+    renderer.draw(ball, paddle1, paddle2);
+  }
 
-      window.requestAnimationFrame(gameLoop);
+  function gameLoop() {
+    // Main game loop
+    window.requestAnimationFrame(gameLoop);
 
-      gameUpdate();
-      draw();
-    }
+    gameUpdate();
+    draw();
+  }
+
+  // Start the countdown and then start the game loop
+    gameLogic.startCountdown(gameLoop);
 
     gameLoop();
   }
