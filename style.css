@@ -104,8 +104,8 @@ body {
 }
 
 /* LIST CONTAINER */
-.links-list li a,
-.signout a,
+.links-list li button,
+.signout button,
 .social-media-icons {
     color: lightgray;
     margin-left: 25px;
