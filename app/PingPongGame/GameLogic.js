@@ -5,6 +5,19 @@ export default class GameLogic {
     this.paddle1 = paddle1;
     this.paddle2 = paddle2;
     this.canvas = canvas;
+
+    this.player1ScoreElement = document.getElementById("player1Score");
+    this.player2ScoreElement = document.getElementById("player2Score");
+
+    if (!this.player1ScoreElement || !this.player2ScoreElement) {
+      console.error("Score elements not found in the DOM.");
+      return;
+    }
+
+    this.player1Score = 0;
+    this.player2Score = 0;
+
+    this.updateScore();
   }
 
   update(keysPressed, isMultiplayer, isAIPlayer) {
@@ -23,7 +36,7 @@ export default class GameLogic {
     this.ballPaddleCollision(this.ball, this.paddle1);
     this.ballPaddleCollision(this.ball, this.paddle2);
 
-    this.increaseScore(this.ball, this.paddle1, this.paddle2);
+    this.checkScore();
   }
 
   paddleCollisionWithTheEdges(paddle) {
@@ -73,38 +86,33 @@ export default class GameLogic {
     }
   }
 
-
-  increaseScore(ball, paddle1, paddle2) {
-  const player1ScoreElement = document.getElementById("player1Score");
-  const player2ScoreElement = document.getElementById("player2Score");
-
-  if (!player1ScoreElement || !player2ScoreElement) {
-    console.error("Score elements not found in the DOM.");
-    return;
+  checkScore() {
+    if (this.ball.pos.x <= -this.ball.radius) {
+      this.player2Score += 1;
+      this.updateScore();
+      this.respawnBall();
+    } else if (this.ball.pos.x >= this.canvas.width + this.ball.radius) {
+      this.player1Score += 1;
+      this.updateScore();
+      this.respawnBall();
+    }
   }
 
-  if (ball.pos.x <= -ball.radius) {
-      paddle2.score += 1;
-      player2ScoreElement.textContent = paddle2.score;
-      this.respawnBall(ball, this.canvas);
-    } else if (ball.pos.x >= this.canvas.width + ball.radius) {
-      paddle1.score += 1;
-      player1ScoreElement.textContent = paddle1.score;
-      this.respawnBall(ball, this.canvas);
-    }
-}
+  updateScore() {
+    this.player1ScoreElement.textContent = this.player1Score;
+    this.player2ScoreElement.textContent = this.player2Score;
+  }
 
-
-  respawnBall(ball, canvas) {
-    if (ball.velocity.x > 0) {
-      ball.pos.x = canvas.width - 150;
-      ball.pos.y = Math.random() * (canvas.height - 200) + 100;
+  respawnBall() {
+    if (this.ball.velocity.x > 0) {
+      this.ball.pos.x = this.canvas.width - 150;
+      this.ball.pos.y = Math.random() * (this.canvas.height - 200) + 100;
     }
-    if (ball.velocity.x < 0) {
-      ball.pos.x = 150;
-      ball.pos.y = Math.random() * (canvas.height - 200) + 100;
+    if (this.ball.velocity.x < 0) {
+      this.ball.pos.x = 150;
+      this.ball.pos.y = Math.random() * (this.canvas.height - 200) + 100;
     }
-    ball.velocity.x *= -1;
-    ball.velocity.y *= 1;
+    this.ball.velocity.x *= -1;
+    this.ball.velocity.y *= 1;
   }
 }
