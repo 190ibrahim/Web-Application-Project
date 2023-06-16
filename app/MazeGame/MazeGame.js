@@ -40,6 +40,13 @@ export default class MazeGame extends Application {
     this.upPressed = false;
     this.downPressed = false;
 let animation;
+    /*this.map = [
+      this.map = [
+        [1,0,1],
+        [1,0,1],
+        [1,0,0]
+    ];*/
+
     this.map = [
   [1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
   [1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1],
@@ -64,6 +71,7 @@ let animation;
   [1,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1,1,1,1,1],
   [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
     ];
+    
     const tiles = [];
     for (let i = 0; i < this.map.length; i++) {
       tiles[i] = [];
@@ -165,6 +173,9 @@ let animation;
       this.canvas.style.visibility = "hidden";
       const win = document.querySelector(".win");
       win.style.visibility = "visible";
+      // Show an alert message that says 'You won!'
+      alert('You won!');
+
     };
 
     const keyDownHandler = (e) => {
