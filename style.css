@@ -104,7 +104,7 @@ body {
 }
 
 /* LIST CONTAINER */
-.links-list li a,
+.links-list li button,
 .signout a,
 .social-media-icons {
     color: lightgray;
