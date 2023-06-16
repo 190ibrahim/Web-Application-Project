@@ -628,7 +628,9 @@ body {
 }
 
 .main-screen {
-    display: xd;
+
+    display: flex;
+
     flex-direction: column;
     width: 75%;
     padding: 15px;
@@ -697,6 +699,8 @@ body {
     transform: translateY(0);
 }
 
+
+
 /* Maze Game */
 .maze-container {
     position: relative;
@@ -716,3 +720,4 @@ body {
      right: 0;
      top: 50%;
  }
+
