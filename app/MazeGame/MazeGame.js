@@ -22,6 +22,11 @@ export default class MazeGame extends Application {
     h1Elem.textContent = 'Well done! You won!';
     winElem.appendChild(h1Elem);
 
+    // Create a button element with the replay function
+    const replay = document.createElement('replay');
+    replay.textContent = 'Replay';
+    replay.className = 'replay';
+
     this.canvas = canvasElem;
     this.ctx = canvasElem.getContext('2d');
     this.target.appendChild(containerElem);
@@ -169,14 +174,34 @@ let animation;
       }
     };
 
+  //replay.style.cursor = "pointer";
+
     const gameOver = () => {
+      console.log('Game over function called');
       this.canvas.style.visibility = "hidden";
       const win = document.querySelector(".win");
-      win.style.visibility = "visible";
-      // Show an alert message that says 'You won!'
-      alert('You won!');
-
+      win.style.display = "block";
+      console.log('Win element display:', win.style.display);
+    
+      // Make the replay button visible and clickable
+      replay.style.cursor = "pointer";
+      replay.addEventListener("click", () => {
+        // Reset the player position and visibility
+        this.player.x = this.canvas.width - this.tileSize;
+        this.player.y = this.canvas.height - (this.tileSize * 5);
+        this.canvas.style.visibility = "visible";
+        // Hide the win element
+        win.style.display = "none";
+        // Start the animation again
+        animation = requestAnimationFrame(draw);
+      });
+    
+      // Append the button to the win element
+      win.appendChild(replay);
     };
+    
+    
+    
 
     const keyDownHandler = (e) => {
 if (e.keyCode === 39) {
