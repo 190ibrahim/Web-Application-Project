@@ -3,7 +3,7 @@ const teamData = {
   member1: {
     name: "Ibrahim",
     profession: "Web Developer",
-    image: "../../pictures/ibrahim.jpg",
+    image: "../../pictures/Ibrahim (2).jpg",
     socialMedia: {
       facebook: "https://www.facebook.com/johndoe",
       twitter: "https://www.twitter.com/johndoe",
