@@ -12,6 +12,7 @@ export default class GeoJSONApp extends Application {
     }
 
     createHTML() {
+
         const containerElem = document.createElement('div');
         containerElem.className = 'victor-container';
 
@@ -30,7 +31,7 @@ export default class GeoJSONApp extends Application {
         const resultElem = this.createValidationResultElement();
         containerElem.appendChild(resultElem);
 
-        document.body.appendChild(containerElem);
+        this.target.appendChild(containerElem);
     }
 
     createValidationResultElement() {
