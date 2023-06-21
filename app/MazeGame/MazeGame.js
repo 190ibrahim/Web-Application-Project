@@ -24,6 +24,7 @@ export default class MazeGame extends Application {
 
     // Create a button element with the replay function
     const replay = document.createElement('replay');
+    replay.setAttribute('data-app', 'MazeGame')
     replay.textContent = 'Replay';
     replay.className = 'replay';
 
@@ -185,7 +186,14 @@ let animation;
     
       // Make the replay button visible and clickable
       replay.style.cursor = "pointer";
-      replay.addEventListener("click", () => {
+
+    
+      // Append the button to the win element
+      win.appendChild(replay);
+    };
+    
+    
+          replay.addEventListener("click", () => {
         // Reset the player position and visibility
         this.player.x = this.canvas.width - this.tileSize;
         this.player.y = this.canvas.height - (this.tileSize * 5);
@@ -195,13 +203,6 @@ let animation;
         // Start the animation again
         animation = requestAnimationFrame(draw);
       });
-    
-      // Append the button to the win element
-      win.appendChild(replay);
-    };
-    
-    
-    
 
     const keyDownHandler = (e) => {
 if (e.keyCode === 39) {
