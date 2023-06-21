@@ -1,4 +1,7 @@
 // PingPongGame.js
+// the PingPongGame class sets up the game by creating DOM elements,
+//  initializing input handling, creating game objects, defining game update and render functions,
+//  and running the game loop to keep the game logic and rendering in sync.
 import Application from "../Application.js";
 import Ball from "./Ball.js";
 import Paddle from "./Paddle.js";
@@ -11,10 +14,7 @@ export default class PingPongGame extends Application {
 
   init() {
     super.init();
-    this.initDom();
-  }
 
-  initDom() {
     // Create container div element
     const container = document.createElement("div");
     container.classList.add("PingPong-container");
@@ -45,38 +45,36 @@ export default class PingPongGame extends Application {
     const aiPlayerButton = document.createElement("button");
     aiPlayerButton.textContent = "AI Player";
     aiPlayerButton.classList.add("button", "mode-btn");
-    aiPlayerButton.style.left = "20%";
+    aiPlayerButton.style.right = "0";
     aiPlayerButton.id = "aiPlayer";
 
-    const resetButton = document.createElement("button");
-    resetButton.textContent = "Reset";
-    resetButton.classList.add("button", "mode-btn");
-    resetButton.style.right = "20%";
-    resetButton.id = "reset";
+
 
     // Create pause button element
     const pauseButton = document.createElement("button");
     pauseButton.textContent = "Pause";
     pauseButton.classList.add("button", "mode-btn");
-    pauseButton.style.right = "0";
+    pauseButton.style.left = "42%";
     pauseButton.id = "pause";
 
     // Append elements to container
     container.appendChild(multiplayerButton);
     container.appendChild(aiPlayerButton);
-    container.appendChild(resetButton);
     container.appendChild(pauseButton);
     container.appendChild(canvas);
     container.appendChild(player1Score);
     container.appendChild(player2Score);
 
     // Append container to the document body or any desired parent element
-    document.getElementById("app").appendChild(container);
+    this.target.appendChild(container);
     const ctx = canvas.getContext("2d");
 
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    // Input Handler Initialization: An instance of the InputHandler class is created
+    //  to handle user input and keep track of game settings.
     const inputHandler = new InputHandler();
+inputHandler.setPauseButtonClicked(); // Set initial state to paused
 
     const KEY_UP = 38;
     const KEY_DOWN = 40;
@@ -114,6 +112,7 @@ export default class PingPongGame extends Application {
 
     function gameUpdate() {
       const keysPressed = inputHandler.getKeysPressed();
+      // It retrieves the keys pressed from the InputHandler, determines the game mode (multiplayer or AI player)
       const isMultiplayer = inputHandler.isMultiplayerMode();
       const isAIPlayer = inputHandler.isAIPlayerMode();
       const isPauseButtonClicked = inputHandler.isPauseButtonClicked;
@@ -128,7 +127,9 @@ export default class PingPongGame extends Application {
     }
 
     function gameLoop() {
-
+//  The game loop is implemented using requestAnimationFrame().
+//   Inside the loop, the gameUpdate() and draw() functions
+//    are called to continuously update and render the game.
       window.requestAnimationFrame(gameLoop);
 
       gameUpdate();

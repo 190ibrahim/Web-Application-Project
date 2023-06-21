@@ -14,7 +14,9 @@ const teamData = {
   member2: {
     name: "Chaimae",
     profession: "Graphic Designer",
+
     image: "../../pictures/chaimae.jpeg",
+
     socialMedia: {
       facebook: "https://www.facebook.com/janesmith",
       twitter: "https://www.twitter.com/janesmith",

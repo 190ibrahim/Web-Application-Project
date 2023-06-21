@@ -15,31 +15,33 @@ document.addEventListener('DOMContentLoaded', () => {
       const btns = document.querySelectorAll('button');
       const target = document.getElementById('app');
   
-      for (let btn of btns) {
-          btn.addEventListener('click', function(evt) {
-              if (application) {
-                  application.destroy();
-              }
-  
-              const appName = btn.getAttribute('data-app');
-              if (appName) {
-                  const appPath = `./app/${appName}/${appName}.js`;
-                  // import returns a promise => building block of async programming in JS
-                  import(appPath).then(function(appModule) {
-                      // Success branch
-                      const appObject = appModule.default;
-                      application = new appObject({
-                          statBarTarget: document.getElementById('status'),
-                          target: target
-                      });
-                  }, function(err) {
-                      // Error branch
-                      throw err;
-                  });
-              } else {
-                  throw new Error(`No application was linked to button ${btn.textContent}`);
-              }
-          });
-      }
+        // Loop through each button
+        for (let btn of btns) {
+            btn.addEventListener('click', function(evt) {
+            // Destroy the existing application if it exists
+            if (application) {
+                application.destroy();
+            }
+
+            const appName = btn.getAttribute('data-app'); // Get the 'data-app' attribute value of the clicked button
+            if (appName) {
+                const appPath = `./app/${appName}/${appName}.js`; // Construct the path to the JavaScript file of the selected application
+
+                // Dynamically import the JavaScript module
+                import(appPath).then(function(appModule) {
+                const appObject = appModule.default; // Retrieve the default exported object from the module
+                // Instantiate the application object with the target elements
+                application = new appObject({
+                    statBarTarget: document.getElementById('status'),
+                    target: target
+                });
+                }, function(err) {
+                throw err;
+                });
+            } else {
+                throw new Error(`No application was linked to button ${btn.textContent}`);
+            }
+            });
+        }
   });
   

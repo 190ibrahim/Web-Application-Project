@@ -73,16 +73,16 @@ export default class Pacman {
 
   #loadPacmanImages() {
     const pacmanImage1 = new Image();
-    pacmanImage1.src = "../../pictures/pac0.png";
+    pacmanImage1.src = "..//..//pictures//pac0.png";
 
     const pacmanImage2 = new Image();
-    pacmanImage2.src = "../../pictures/pac1.png";
+    pacmanImage2.src = "..//..//pictures//pac1.png";
 
     const pacmanImage3 = new Image();
-    pacmanImage3.src = "../../pictures/pac2.png";
+    pacmanImage3.src = "..//..//pictures//pac2.png";
 
     const pacmanImage4 = new Image();
-    pacmanImage4.src = "../../pictures/pac1.png";
+    pacmanImage4.src = "..//..//pictures//pac1.png";
 
     this.pacmanImages = [
       pacmanImage1,

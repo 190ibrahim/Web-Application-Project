@@ -447,7 +447,6 @@ footer a {
 }
 
 
-
 /* Our Team */
 section {
     position: relative;
@@ -602,4 +601,69 @@ section .card .image img {
 .swiper-button-prev:hover {
     opacity: 1;
     color: #4070f4;
+}
+
+
+
+
+
+/*
+Victor App
+ */
+
+.victor-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Styles for the textarea */
+textarea {
+    width: 100%;
+    height: 200px;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+    margin-bottom: 10px;
+}
+
+button {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.victor-container button:hover {
+    background-color: #ddd;
+}
+
+/* Styles for the validation result */
+.validation-result {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.validation-result.valid {
+    background-color: #dff0d8;
+    color: #3c763d;
+}
+
+.validation-result.invalid {
+    background-color: #f2dede;
+    color: #a94442;
 }

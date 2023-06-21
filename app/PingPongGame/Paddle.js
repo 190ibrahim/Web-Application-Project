@@ -9,8 +9,10 @@ export default class Paddle {
     this.downKey = downKey;
   }
 
+  // Update the paddle's position based on user input
   update(keysPressed, isMultiplayer, isAIPlayer) {
     if (isMultiplayer) {
+      // Update position based on the specified up and down keys for multiplayer mode
       if (keysPressed[this.upKey]) {
         this.pos.y -= this.velocity.y;
       }
@@ -19,6 +21,7 @@ export default class Paddle {
         this.pos.y += this.velocity.y;
       }
     } else if (isAIPlayer) {
+      // Update position based on the hardcoded key codes for AI player (up and down arrow keys)
       if (keysPressed[38]) { // KEY_UP
         this.pos.y -= this.velocity.y;
       }
@@ -29,20 +32,24 @@ export default class Paddle {
     }
   }
 
+  // Draw the paddle on the canvas
   draw(ctx) {
-    ctx.fillStyle = "#33ff00";
+    ctx.fillStyle = "#33ff00"; // Set fill color to green
     ctx.beginPath();
-    ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
+    ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height); // Draw a filled rectangle representing the paddle
   }
 
+  // Return half the width of the paddle
   getHalfWidth() {
     return this.width / 2;
   }
 
+  // Return half the height of the paddle
   getHalfHeight() {
     return this.height / 2;
   }
 
+  // Return the center coordinates of the paddle
   getCenter() {
     return {
       x: this.pos.x + this.getHalfWidth(),

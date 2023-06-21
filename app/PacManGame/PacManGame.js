@@ -16,7 +16,7 @@ export default class PacManGame extends Application {
     h1Elem.className = 'pacMan-title';
 
     const canvas = document.createElement('canvas');
-      canvas.width = 420;
+    canvas.width = 420;
     canvas.height = 480;
     canvas.id = 'pacManCanvas';
     containerElem.appendChild(h1Elem);
@@ -41,11 +41,11 @@ export default class PacManGame extends Application {
 
   gameLoop() {
     this.tileMap.draw(this.ctx);
-    this.drawGameEnd();
     this.pacman.draw(this.ctx, this.pause(), this.enemies);
     this.enemies.forEach((enemy) => enemy.draw(this.ctx, this.pause(), this.pacman));
     this.checkGameOver();
     this.checkGameWin();
+    this.drawGameEnd(); // Move the drawGameEnd() call here to ensure it's called every frame
 
     if (!this.gameOver && !this.gameWin) {
       requestAnimationFrame(this.gameLoop.bind(this));
@@ -82,7 +82,7 @@ export default class PacManGame extends Application {
 
   drawGameEnd() {
     if (this.gameOver || this.gameWin) {
-      let text = " You Win!";
+      let text = "You Win!";
       if (this.gameOver) {
         text = "Game Over";
       }
@@ -92,9 +92,9 @@ export default class PacManGame extends Application {
 
       this.ctx.font = "75px comic sans";
       const gradient = this.ctx.createLinearGradient(0, 0, this.canvas.width, 0);
-      gradient.addColorStop("0", "magenta");
-      gradient.addColorStop("0.5", "blue");
-      gradient.addColorStop("1.0", "red");
+      gradient.addColorStop(0, "magenta");
+      gradient.addColorStop(0.5, "blue");
+      gradient.addColorStop(1.0, "red");
 
       this.ctx.fillStyle = gradient;
       this.ctx.fillText(text, 10, this.canvas.height / 2);
