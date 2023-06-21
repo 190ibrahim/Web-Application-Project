@@ -3,7 +3,7 @@ const teamData = {
   member1: {
     name: "Ibrahim",
     profession: "Web Developer",
-    image: "images/img1.jpg",
+    image: "pictures/ibrahim.jpeg",
     socialMedia: {
       facebook: "https://www.facebook.com/johndoe",
       twitter: "https://www.twitter.com/johndoe",
@@ -14,7 +14,7 @@ const teamData = {
   member2: {
     name: "Chaimae",
     profession: "Graphic Designer",
-    image: "images/img2.jpg",
+    image: "pictures/chaimae.jpeg",
     socialMedia: {
       facebook: "https://www.facebook.com/janesmith",
       twitter: "https://www.twitter.com/janesmith",
@@ -25,7 +25,7 @@ const teamData = {
   member: {
     name: "Dita",
     profession: "Web Developer",
-    image: "images/img2.jpg",
+    image: "pictures/dita.jpg",
     socialMedia: {
       facebook: "https://www.facebook.com/janesmith",
       twitter: "https://www.twitter.com/janesmith",
@@ -47,7 +47,7 @@ const teamData = {
   member5: {
     name: "Victor",
     profession: "Web Developer",
-    image: "images/img2.jpg",
+    image: "pictures/viktor.jpeg",
     socialMedia: {
       facebook: "https://www.facebook.com/janesmith",
       twitter: "https://www.twitter.com/janesmith",
@@ -55,17 +55,7 @@ const teamData = {
     },
     rating: 5
   },
-  member6: {
-    name: "Dita",
-    profession: "Web Developer",
-    image: "images/img2.jpg",
-    socialMedia: {
-      facebook: "https://www.facebook.com/janesmith",
-      twitter: "https://www.twitter.com/janesmith",
-      github: "https://www.github.com/janesmith"
-    },
-    rating: 5
-  },
+
 };
 
 export default class OurTeam extends Application {
