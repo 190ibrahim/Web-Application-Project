@@ -52,7 +52,7 @@ export default class PingPongGame extends Application {
 
     // Create pause button element
     const pauseButton = document.createElement("button");
-    pauseButton.textContent = "Pause";
+    pauseButton.textContent = "Start";
     pauseButton.classList.add("button", "mode-btn");
     pauseButton.style.left = "42%";
     pauseButton.id = "pause";
